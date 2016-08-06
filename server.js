@@ -72,9 +72,34 @@ var images = [
 	'https://cldup.com/fVAWtFxeFF.gif',
 	'https://cldup.com/MqvaVflowZ.gif',
 	'https://cldup.com/_HteU_MWnN.gif',
+	// marker
+	'https://cldup.com/3Pfht6mu-M.gif',
+	'https://cldup.com/7dO80Hq9_w.gif',
+	'https://cldup.com/mWd_69vd9m.gif',
+	'https://cldup.com/5ER8kx23Hv.jpg',
+	'https://cldup.com/8JATbSqFdY.gif',
+	'https://cldup.com/cJlH2j7VPQ.gif',
+	'https://cldup.com/yJZDnc3yfB.gif',
+	'https://cldup.com/_ZHqyDEWkf.jpg',
+	'https://cldup.com/c6ZJKuVy_R.gif',
+	'https://cldup.com/VmyCd9ov74.jpg',
+	'https://cldup.com/XEEWQRLwZB.gif',
+	'https://cldup.com/R2qfO8AK7d.gif',
+	'https://cldup.com/YHvIaVCYmL.gif',
+	'https://cldup.com/kvtp6q2Dfw.gif',
+	'https://cldup.com/XDv_d8bjqE.gif',
+	'https://cldup.com/8lBrPHO-XJ.jpg',
+	'https://cldup.com/G2NfBuF5gT.gif',
+	'https://cldup.com/18SjDA-U6Q.gif https://cldup.com/cXhs8Xp5gN.gif', // yes, two in one
+	'https://cldup.com/OG7xlzH3xl.gif', // tinker tailor
 ];
 
-// Auto-responder
+function log(msg)
+{
+	console.log([new Date(), msg].join(' '));
+}
+
+// Bollock whoever @-mentioned him.
 var mentions = T.stream('user');
 mentions.on('tweet', function handleMention(tweet)
 {
@@ -95,12 +120,13 @@ mentions.on('tweet', function handleMention(tweet)
 	T.post('statuses/update', toot, function handleMentionResponse(err, data, res)
 	{
 		if (err)
-			console.error(err);
+			log(err);
 		else
-			console.log('reply posted; id=' + data.id_str + '; ' + text);
+			log('reply posted; id=' + data.id_str + '; ' + text);
 	});
 });
 
+// Bollocking the air around him.
 function postPeriodically()
 {
 	var text;
@@ -112,12 +138,12 @@ function postPeriodically()
 	T.post('statuses/update', { status: text }, function handlePostResponse(err, data, res)
 	{
 		if (err)
-			console.error(err);
+			log(err);
 		else
-			console.log('tweet posted; id=' + data.id_str + '; ' + text);
+			log('tweet posted; id=' + data.id_str + '; ' + text);
 	});
 }
 
-console.log('Malcolm Tucker coming online.');
+log('Malcolm Tucker coming online.');
 postPeriodically();
-setInterval(postPeriodically, 60 * 60 * 1000); // once an hour
+setInterval(postPeriodically, 180 * 60 * 1000); // once every three hours
