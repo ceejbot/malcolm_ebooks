@@ -1,6 +1,6 @@
 # malcolm_ebooks
 
-Malcolm Tucker markov-chains twitter bot. Not polite in any way.
+[Malcolm Tucker](https://en.wikipedia.org/wiki/Malcolm_Tucker) markov-chains twitter bot. Not polite in any way.
 
 ## Usage
 
