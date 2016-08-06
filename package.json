@@ -2,17 +2,27 @@
   "name": "malcolm_ebooks",
   "description": "Malcolm as a service",
   "version": "1.0.0",
+  "author": "C J Silverio <ceejceej@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/ceejbot/malcolm_ebooks/issues"
+  },
   "dependencies": {
     "dotenv": "~2.0.0",
     "lodash.map": "~4.5.1",
     "markov-chains-text": "~1.0.0",
     "twit": "~2.2.4"
   },
+  "devDependencies": {},
+  "homepage": "https://github.com/ceejbot/malcolm_ebooks#readme",
   "keywords": [],
   "license": "ISC",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ceejbot/malcolm_ebooks.git"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./server.js"
+    "start": "./server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
