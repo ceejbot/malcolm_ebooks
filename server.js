@@ -17,7 +17,6 @@ var config = {
 	access_token_secret:  process.env.TWITTER_ACCESS_TOKEN_SECRET,
 	timeout_ms:           60 * 1000,  // optional HTTP request timeout to apply to all requests.
 };
-
 var T = new Twit(config);
 
 // Auto-responder
@@ -33,8 +32,7 @@ mentions.on('tweet', function handleMention(tweet)
 		text = fakeMalc.makeSentence();
 
 	text = '@' + tweet.user.screen_name + ' ' + text;
-	var toot =
-	{
+	var toot = {
 		status: text.substring(0, 140),
 		in_reply_to_status_id: tweet.id_str
 	};
@@ -42,9 +40,9 @@ mentions.on('tweet', function handleMention(tweet)
 	T.post('statuses/update', toot, function handleMentionResponse(err, data, res)
 	{
 		if (err)
-			console.error(err)
+			console.error(err);
 		else
-			console.log('reply posted; id=' + data.id_str + '; ' + text)
+			console.log('reply posted; id=' + data.id_str + '; ' + text);
 	});
 });
 
@@ -54,11 +52,12 @@ function postPeriodically()
 	T.post('statuses/update', { status: text }, function handlePostResponse(err, data, res)
 	{
 		if (err)
-			console.error(err)
+			console.error(err);
 		else
-			console.log('tweet posted; id=' + data.id_str + '; ' + text)
+			console.log('tweet posted; id=' + data.id_str + '; ' + text);
 	});
 }
 
-var timer = setTimeout(postPeriodically, 60 * 60 * 1000); // once an hour
 console.log('Malcolm Tucker coming online.');
+postPeriodically();
+setTimeout(postPeriodically, 60 * 60 * 1000); // once an hour
