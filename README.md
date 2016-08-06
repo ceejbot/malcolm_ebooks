@@ -1,6 +1,6 @@
 # malcolm_ebooks
 
-Malcolm Tucker markov-chains twitter bot.
+Malcolm Tucker markov-chains twitter bot. Not polite in any way.
 
 ## Usage
 
@@ -13,7 +13,7 @@ TWITTER_ACCESS_TOKEN=you-token
 TWITTER_ACCESS_TOKEN_SECRET=your-secret
 ```
 
-Then run `npm start`. Malcolm will now be online.
+Then run `npm start`. Malcolm will now be online and swearing incoherently.
 
 ## License
 
