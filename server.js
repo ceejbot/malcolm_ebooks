@@ -60,4 +60,4 @@ function postPeriodically()
 
 console.log('Malcolm Tucker coming online.');
 postPeriodically();
-setTimeout(postPeriodically, 60 * 60 * 1000); // once an hour
+setInterval(postPeriodically, 60 * 60 * 1000); // once an hour
