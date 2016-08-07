@@ -130,7 +130,7 @@ mentions.on('tweet', function handleMention(tweet)
 function postPeriodically()
 {
 	var text;
-	if (Math.floor(Math.random() * 100) < 10)
+	if (Math.floor(Math.random() * 100) < 15)
 		text = images[Math.floor(Math.random() * images.length)];
 	else
 		text = fakeMalc.makeSentence().substring(0, 140);
