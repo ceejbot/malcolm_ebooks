@@ -107,9 +107,7 @@ mentions.on('tweet', function handleMention(tweet)
 		return;
 
 	var seed = tweet.text.replace(/@malcolm_ebooks/g, '').trim();
-	var text = fakeMalc.makeSentence(seed);
-	if (typeof text !== 'string')
-		text = fakeMalc.makeSentence();
+	var text = fakeMalc.makeSentence();
 
 	text = '@' + tweet.user.screen_name + ' ' + text;
 	var toot = {
