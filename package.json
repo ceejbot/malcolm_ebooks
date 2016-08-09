@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "dotenv": "~2.0.0",
+    "ellipsize": "0.0.2",
     "markov-chains-text": "~1.0.0",
     "twit": "~2.2.4"
   },
