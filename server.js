@@ -87,7 +87,7 @@ function postImage()
 // Bollocking the air around him.
 function postPeriodically()
 {
-	if (images.length && Math.floor(Math.random() * 100) < 150)
+	if (images.length && Math.floor(Math.random() * 100) < 12)
 		return postImage();
 
 	var text = ellipsize(fakeMalc.makeSentence(), 140);
