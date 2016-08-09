@@ -60,7 +60,7 @@ mentions.on('tweet', function handleMention(tweet)
 
 mentions.on('error', function handleMentionsError(err)
 {
-	log('mentions error: ' + err.message());
+	log('mentions error: ' + err);
 });
 
 function postImage()
