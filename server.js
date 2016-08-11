@@ -96,4 +96,4 @@ function postPeriodically()
 
 log('Malcolm Tucker coming online.');
 postPeriodically();
-setInterval(postPeriodically, 180 * 60 * 1000); // once every three hours
+setInterval(postPeriodically, 150 * 60 * 1000); // once every 2.5 hours
