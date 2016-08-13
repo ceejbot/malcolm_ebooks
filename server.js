@@ -2,14 +2,12 @@
 
 require('dotenv').config();
 var
-	Chains    = require('markov-chains-text').default,
 	ellipsize = require('ellipsize'),
 	fs        = require('fs'),
 	Twit      = require('twit')
 	;
 
-var source = fs.readFileSync('./malcolm.txt', 'ascii');
-var fakeMalc = new Chains(source);
+var lines = fs.readFileSync('./curated.txt', 'ascii').split('\n');
 
 var images = [];
 try { images = fs.readdirSync('./images'); }
@@ -27,6 +25,12 @@ var T = new Twit(config);
 function log(msg)
 {
 	console.log([new Date(), msg].join(' '));
+}
+
+function chooseLine(len)
+{
+	var text = lines[Math.floor(Math.random() * lines.length)];
+	return ellipsize(text, len || 140);
 }
 
 function postTweet(toot)
@@ -47,7 +51,7 @@ mentions.on('tweet', function handleMention(tweet)
 	if (tweet.in_reply_to_screen_name !== 'malcolm_ebooks')
 		return;
 
-	var text = fakeMalc.makeSentence();
+	var text = lines[Math.floor(Math.random() * lines.length)];
 
 	text = '@' + tweet.user.screen_name + ' ' + text;
 	var toot = {
@@ -78,8 +82,7 @@ function postImage()
 
 		var imageID = data.media_id_string;
 		log('image uploaded; id=' + imageID);
-		var text = ellipsize(fakeMalc.makeSentence(), 120);
-		var toot = { status: text, media_ids: [ imageID ] };
+		var toot = { status: chooseLine(120), media_ids: [ imageID ] };
 		postTweet(toot);
 	});
 }
@@ -90,8 +93,7 @@ function postPeriodically()
 	if (images.length && Math.floor(Math.random() * 100) < 12)
 		return postImage();
 
-	var text = ellipsize(fakeMalc.makeSentence(), 140);
-	postTweet({ status: text });
+	postTweet({ status: chooseLine() });
 }
 
 log('Malcolm Tucker coming online.');
