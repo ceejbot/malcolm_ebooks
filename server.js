@@ -62,11 +62,11 @@ mentions.on('tweet', function handleMention(tweet)
 	if (tweet.in_reply_to_screen_name !== 'malcolm_ebooks')
 		return;
 
-	var text = lines[Math.floor(Math.random() * lines.length)];
+	var prefix = '@' + tweet.user.screen_name + ' ';
+	var text = chooseLine(140 - prefix.length);
 
-	text = '@' + tweet.user.screen_name + ' ' + text;
 	var toot = {
-		status: text.substring(0, 140),
+		status: prefix + text,
 		in_reply_to_status_id: tweet.id_str
 	};
 
