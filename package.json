@@ -9,6 +9,7 @@
   "dependencies": {
     "dotenv": "~2.0.0",
     "ellipsize": "0.0.2",
+    "knuth-shuffle": "~1.0.1",
     "markov-chains-text": "~1.0.0",
     "twit": "~2.2.4"
   },

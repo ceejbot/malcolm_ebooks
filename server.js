@@ -4,10 +4,22 @@ require('dotenv').config();
 var
 	ellipsize = require('ellipsize'),
 	fs        = require('fs'),
+	shuffle   = require('knuth-shuffle').knuthShuffle,
 	Twit      = require('twit')
 	;
 
-var lines = fs.readFileSync('./curated.txt', 'ascii').split('\n');
+function log(msg)
+{
+	console.log([new Date(), msg].join(' '));
+}
+
+function readInTheLines()
+{
+	var lines = fs.readFileSync('./curated.txt', 'ascii').split('\n');
+	shuffle(lines);
+	log('--- read in ' + lines.length + ' messages to choose from');
+	return lines;
+}
 
 var images = [];
 try { images = fs.readdirSync('./images'); }
@@ -22,14 +34,13 @@ var config = {
 };
 var T = new Twit(config);
 
-function log(msg)
-{
-	console.log([new Date(), msg].join(' '));
-}
-
+var malcolm = readInTheLines();
 function chooseLine(len)
 {
-	var text = lines[Math.floor(Math.random() * lines.length)];
+	var text = malcolm.pop();
+	// reset if we've expended them all
+	if (malcolm.length < 1)
+		malcolm = readInTheLines();
 	return ellipsize(text, len || 140);
 }
 
