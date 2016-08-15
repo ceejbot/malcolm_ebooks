@@ -93,7 +93,7 @@ function postImage()
 
 		var imageID = data.media_id_string;
 		log('image uploaded; id=' + imageID);
-		var toot = { status: chooseLine(118), media_ids: [ imageID ] };
+		var toot = { status: 'Fuck.', media_ids: [ imageID ] };
 		postTweet(toot);
 	});
 }
