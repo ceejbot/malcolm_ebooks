@@ -17,13 +17,24 @@ function readInTheLines()
 {
 	var lines = fs.readFileSync('./curated.txt', 'ascii').split('\n');
 	shuffle(lines);
-	log('--- read in ' + lines.length + ' messages to choose from');
+	log('--- ' + lines.length + ' messages read & shuffled');
 	return lines;
 }
 
-var images = [];
-try { images = fs.readdirSync('./images'); }
-catch(ex) {}
+function readInTheImages()
+{
+	var imgs = [];
+	try
+	{
+		imgs = fs.readdirSync('./images');
+		shuffle(imgs);
+		log('--- ' + imgs.length + ' images read');
+
+	}
+	catch(ex) {}
+
+	return imgs;
+}
 
 var config = {
 	consumer_key:         process.env.TWITTER_CONSUMER_KEY,
@@ -34,6 +45,7 @@ var config = {
 };
 var T = new Twit(config);
 
+var images = readInTheImages();
 var malcolm = readInTheLines();
 function chooseLine(len)
 {
@@ -80,7 +92,10 @@ mentions.on('error', function handleMentionsError(err)
 
 function postImage()
 {
-	var img = images[Math.floor(Math.random() * images.length)];
+	var img = images.pop();
+	// reset if we've expended them all
+	if (images.length < 1)
+		images = readInTheImages();
 
 	T.postMediaChunked({ file_path: './images/' + img }, function handleMediaPosted(err, data, response)
 	{
@@ -93,7 +108,7 @@ function postImage()
 
 		var imageID = data.media_id_string;
 		log('image uploaded; id=' + imageID);
-		var toot = { status: 'Fuck.', media_ids: [ imageID ] };
+		var toot = { status: chooseLine(), media_ids: [ imageID ] };
 		postTweet(toot);
 	});
 }
@@ -104,9 +119,9 @@ function postPeriodically()
 	if (images.length && Math.floor(Math.random() * 100) < 12)
 		return postImage();
 
-	postTweet({ status: chooseLine() });
+	postTweet({ status: chooseLine(120) });
 }
 
 log('Malcolm Tucker coming online.');
 postPeriodically();
-setInterval(postPeriodically, 150 * 60 * 1000); // once every 2.5 hours
+setInterval(postPeriodically, 180 * 60 * 1000); // once every 3 hours
