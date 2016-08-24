@@ -8,6 +8,9 @@ var
 	Twit      = require('twit')
 	;
 
+const INTERVAL = 180 * 60 * 1000; // once every 3 hours
+const LAST_POST_FILE = '.lastpost';
+
 function log(msg)
 {
 	console.log([new Date(), msg].join(' '));
@@ -63,7 +66,10 @@ function postTweet(toot)
 		if (err)
 			log(err);
 		else
+		{
 			log('tweet id=' + data.id_str + '; ' + toot.status);
+			fs.writeFileSync(LAST_POST_FILE, (new Date()).toString());
+		}
 	});
 }
 
@@ -123,5 +129,17 @@ function postPeriodically()
 }
 
 log('Malcolm Tucker coming online.');
-postPeriodically();
-setInterval(postPeriodically, 180 * 60 * 1000); // once every 3 hours
+
+var postNow = false;
+try
+{
+	var lastPost = new Date(fs.readFileSync(LAST_POST_FILE, 'ascii'));
+	postNow = (Date.now() - lastPost.getTime()) >= INTERVAL/2;
+}
+catch (e)
+{
+	postNow = true;
+}
+
+if (postNow) postPeriodically();
+setInterval(postPeriodically, INTERVAL);
