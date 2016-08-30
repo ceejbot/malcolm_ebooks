@@ -18,7 +18,7 @@ function log(msg)
 
 function readInTheLines()
 {
-	var lines = fs.readFileSync('./curated.txt', 'ascii').split('\n');
+	var lines = fs.readFileSync('./curated.txt', 'ascii').trim().split('\n');
 	shuffle(lines);
 	log('--- ' + lines.length + ' messages read & shuffled');
 	return lines;

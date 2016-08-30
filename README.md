@@ -13,7 +13,7 @@ TWITTER_ACCESS_TOKEN=you-token
 TWITTER_ACCESS_TOKEN_SECRET=your-secret
 ```
 
-Optionally, make a subdirectory named `images` and toss a few animated gifs of Malcolm in action. He will post a randomly-selected image every so often, along with a randomly-generated comment. No attempt is made to filter files in the `images` directory for actual images.
+Optionally, make a subdirectory named `images` and toss in a few animated gifs of Malcolm in action. He will post a randomly-selected image every so often, along with a randomly-generated comment. No attempt is made to filter files in the `images` directory for actual images.
 
 Then run `npm start`. Malcolm will now be online and swearing incoherently.
 
