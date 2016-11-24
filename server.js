@@ -10,6 +10,7 @@ var
 
 const INTERVAL = 180 * 60 * 1000; // once every 3 hours
 const LAST_POST_FILE = '.lastpost';
+var friends = [];
 
 function log(msg)
 {
@@ -73,9 +74,20 @@ function postTweet(toot)
 	});
 }
 
+function follow(id, callback)
+{
+	var opts = {
+		user_id: id,
+		follow: true,
+	};
+
+	T.post('friendships/create', opts, callback);
+}
+
+var userstream = T.stream('user');
+
 // Bollock whoever @-mentioned him.
-var mentions = T.stream('user');
-mentions.on('tweet', function handleMention(tweet)
+userstream.on('tweet', function handleMention(tweet)
 {
 	if (tweet.in_reply_to_screen_name !== 'malcolm_ebooks')
 		return;
@@ -91,9 +103,53 @@ mentions.on('tweet', function handleMention(tweet)
 	postTweet(toot);
 });
 
-mentions.on('error', function handleMentionsError(err)
+userstream.on('error', function handleMentionsError(err)
 {
-	log('mentions error: ' + err);
+	log('userstream error: ' + err);
+});
+
+userstream.on('follow', function handleFollow(event)
+{
+	if (event.source.screen_name === 'malcolm_ebooks') return;
+
+	log(`followed by ${event.source.screen_name} ${event.source.id}`);
+	follow(event.source.id, function(err, result)
+	{
+		if (err) return log(err);
+
+		var prefix = '@' + event.source.screen_name + ' ';
+		var text = chooseLine(140 - prefix.length);
+
+		postTweet({ status: prefix + text });
+	});
+});
+
+userstream.on('unfollow', function handleUnfollow(event)
+{
+	log(`unfollowed by ${event.source.screen_name} ${event.source.id}`);
+	var opts = { user_id: event.source.id };
+	T.post('friendships/destroy', opts, function(err, result)
+	{
+		if (err) log(err);
+	});
+});
+
+userstream.once('friends', function handleFriendsList(event)
+{
+	friends = event.friends.map((i) => String(i));
+
+	// follow everybody who's following him right now
+	T.get('followers/ids', function(err, followers)
+	{
+		if (err) return log(err);
+		followers.ids.forEach(function(id)
+		{
+			if (friends.indexOf(id) === -1)
+			{
+				follow(id, log);
+			}
+		});
+	});
 });
 
 function postImage()
@@ -134,12 +190,9 @@ var postNow = false;
 try
 {
 	var lastPost = new Date(fs.readFileSync(LAST_POST_FILE, 'ascii'));
-	postNow = (Date.now() - lastPost.getTime()) >= INTERVAL/2;
+	postNow = (Date.now() - lastPost.getTime()) >= INTERVAL / 2;
 }
-catch (e)
-{
-	postNow = true;
-}
+catch (e) { postNow = true; }
 
 if (postNow) postPeriodically();
 setInterval(postPeriodically, INTERVAL);
