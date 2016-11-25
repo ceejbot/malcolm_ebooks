@@ -12,6 +12,8 @@ const INTERVAL = 180 * 60 * 1000; // once every 3 hours
 const LAST_POST_FILE = '.lastpost';
 var friends = [];
 
+const TIM_IN_RUISLIP = 'https://www.youtube.com/watch?v=6GT18lYRRDQ';
+
 function log(msg)
 {
 	console.log([new Date(), msg].join(' '));
@@ -181,7 +183,11 @@ function postPeriodically()
 	if (images.length && Math.floor(Math.random() * 100) < 12)
 		return postImage();
 
-	postTweet({ status: chooseLine(120) });
+	var line = chooseLine(140);
+	if (line.match(/Ruislip/))
+		line += ' ' + TIM_IN_RUISLIP;
+
+	postTweet({ status: line });
 }
 
 log('Malcolm Tucker coming online.');
