@@ -80,7 +80,7 @@ function follow(id, callback)
 {
 	var opts = {
 		user_id: id,
-		follow: true,
+		follow: false,
 	};
 
 	T.post('friendships/create', opts, callback);
@@ -139,11 +139,12 @@ userstream.on('unfollow', function handleUnfollow(event)
 userstream.once('friends', function handleFriendsList(event)
 {
 	friends = event.friends.map((i) => String(i));
+	/*
 
 	// follow everybody who's following him right now
 	T.get('followers/ids', function(err, followers)
 	{
-		if (err) return log(err);
+		if (err) return log(JSON.stringify(err));
 		followers.ids.forEach(function(id)
 		{
 			if (friends.indexOf(id) === -1)
@@ -152,6 +153,7 @@ userstream.once('friends', function handleFriendsList(event)
 			}
 		});
 	});
+	*/
 });
 
 function postImage()
@@ -184,7 +186,7 @@ function postPeriodically()
 		return postImage();
 
 	var line = chooseLine(140);
-	if (line.match(/Ruislip/))
+	if (line.match(/Ruislip/) && Math.floor(Math.random() * 100) < 25)
 		line += ' ' + TIM_IN_RUISLIP;
 
 	postTweet({ status: line });
