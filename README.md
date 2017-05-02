@@ -1,5 +1,7 @@
 # malcolm_ebooks
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ceejbot/malcolm_ebooks.svg)](https://greenkeeper.io/)
+
 [Malcolm Tucker](https://en.wikipedia.org/wiki/Malcolm_Tucker) markov-chains twitter bot. Not polite in any way.
 
 ## Usage
