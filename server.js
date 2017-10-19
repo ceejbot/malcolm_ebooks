@@ -107,7 +107,7 @@ userstream.on('tweet', function handleMention(tweet)
 
 userstream.on('error', function handleMentionsError(err)
 {
-	log('userstream error: ' + err);
+	log('userstream error: ' + err.message);
 });
 
 userstream.on('follow', function handleFollow(event)
@@ -168,7 +168,7 @@ function postImage()
 		if (err)
 		{
 			log('error posting image file: ' + img);
-			log(err);
+			log(err.message);
 			return;
 		}
 
