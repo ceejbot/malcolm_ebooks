@@ -11,6 +11,7 @@ var
 const INTERVAL = 180 * 60 * 1000; // once every 3 hours
 const LAST_POST_FILE = '.lastpost';
 var friends = [];
+const TWEET_LEN = 280;
 
 const TIM_IN_RUISLIP = 'https://www.youtube.com/watch?v=6GT18lYRRDQ';
 
@@ -59,7 +60,7 @@ function chooseLine(len)
 	// reset if we've expended them all
 	if (malcolm.length < 1)
 		malcolm = readInTheLines();
-	return ellipsize(text, len || 140);
+	return ellipsize(text, len || TWEET_LEN);
 }
 
 function postTweet(toot)
@@ -95,7 +96,7 @@ userstream.on('tweet', function handleMention(tweet)
 		return;
 
 	var prefix = '@' + tweet.user.screen_name + ' ';
-	var text = chooseLine(140 - prefix.length);
+	var text = chooseLine(TWEET_LEN - prefix.length);
 
 	var toot = {
 		status: prefix + text,
@@ -120,7 +121,7 @@ userstream.on('follow', function handleFollow(event)
 		if (err) return log(err);
 
 		var prefix = '@' + event.source.screen_name + ' ';
-		var text = chooseLine(140 - prefix.length);
+		var text = chooseLine(TWEET_LEN - prefix.length);
 
 		postTweet({ status: prefix + text });
 	});
@@ -185,7 +186,7 @@ function postPeriodically()
 	if (images.length && Math.floor(Math.random() * 100) < 12)
 		return postImage();
 
-	var line = chooseLine(140);
+	var line = chooseLine(TWEET_LEN);
 	if (line.match(/Ruislip/) && Math.floor(Math.random() * 100) < 25)
 		line += ' ' + TIM_IN_RUISLIP;
 
