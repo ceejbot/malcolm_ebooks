@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 require('dotenv').config();
-var
+const
 	ellipsize = require('ellipsize'),
 	fs        = require('fs'),
 	shuffle   = require('knuth-shuffle').knuthShuffle,
@@ -10,7 +10,6 @@ var
 
 const INTERVAL = 180 * 60 * 1000; // once every 3 hours
 const LAST_POST_FILE = '.lastpost';
-var friends = [];
 const TWEET_LEN = 280;
 
 const TIM_IN_RUISLIP = 'https://www.youtube.com/watch?v=6GT18lYRRDQ';
@@ -22,7 +21,7 @@ function log(msg)
 
 function readInTheLines()
 {
-	var lines = fs.readFileSync('./curated.txt', 'ascii').trim().split('\n');
+	const lines = fs.readFileSync('./curated.txt', 'ascii').trim().split('\n');
 	shuffle(lines);
 	log('--- ' + lines.length + ' messages read & shuffled');
 	return lines;
@@ -38,7 +37,7 @@ function readInTheImages()
 		log('--- ' + imgs.length + ' images read');
 
 	}
-	catch(ex) {}
+	catch (ex) {}
 
 	return imgs;
 }
@@ -50,15 +49,15 @@ var config = {
 	access_token_secret:  process.env.TWITTER_ACCESS_TOKEN_SECRET,
 	timeout_ms:           60 * 1000,  // optional HTTP request timeout to apply to all requests.
 };
-var T = new Twit(config);
+const T = new Twit(config);
 
-var images = readInTheImages();
-var malcolm = readInTheLines();
+let images = readInTheImages();
+let malcolm = readInTheLines();
 function chooseLine(len)
 {
 	var text = malcolm.pop();
 	// reset if we've expended them all
-	if (malcolm.length < 1)
+	if (malcolm.length === 0)
 		malcolm = readInTheLines();
 	return ellipsize(text, len || TWEET_LEN);
 }
@@ -77,91 +76,11 @@ function postTweet(toot)
 	});
 }
 
-function follow(id, callback)
-{
-	var opts = {
-		user_id: id,
-		follow: false,
-	};
-
-	T.post('friendships/create', opts, callback);
-}
-
-var userstream = T.stream('user');
-
-// Bollock whoever @-mentioned him.
-userstream.on('tweet', function handleMention(tweet)
-{
-	if (tweet.in_reply_to_screen_name !== 'malcolm_ebooks')
-		return;
-
-	var prefix = '@' + tweet.user.screen_name + ' ';
-	var text = chooseLine(TWEET_LEN - prefix.length);
-
-	var toot = {
-		status: prefix + text,
-		in_reply_to_status_id: tweet.id_str
-	};
-
-	postTweet(toot);
-});
-
-userstream.on('error', function handleMentionsError(err)
-{
-	log('userstream error: ' + err.message);
-});
-
-userstream.on('follow', function handleFollow(event)
-{
-	if (event.source.screen_name === 'malcolm_ebooks') return;
-
-	log(`followed by ${event.source.screen_name} ${event.source.id}`);
-	follow(event.source.id, function(err, result)
-	{
-		if (err) return log(err);
-
-		var prefix = '@' + event.source.screen_name + ' ';
-		var text = chooseLine(TWEET_LEN - prefix.length);
-
-		postTweet({ status: prefix + text });
-	});
-});
-
-userstream.on('unfollow', function handleUnfollow(event)
-{
-	log(`unfollowed by ${event.source.screen_name} ${event.source.id}`);
-	var opts = { user_id: event.source.id };
-	T.post('friendships/destroy', opts, function(err, result)
-	{
-		if (err) log(err);
-	});
-});
-
-userstream.once('friends', function handleFriendsList(event)
-{
-	friends = event.friends.map((i) => String(i));
-	/*
-
-	// follow everybody who's following him right now
-	T.get('followers/ids', function(err, followers)
-	{
-		if (err) return log(JSON.stringify(err));
-		followers.ids.forEach(function(id)
-		{
-			if (friends.indexOf(id) === -1)
-			{
-				follow(id, log);
-			}
-		});
-	});
-	*/
-});
-
 function postImage()
 {
-	var img = images.pop();
+	const img = images.pop();
 	// reset if we've expended them all
-	if (images.length < 1)
+	if (images.length === 0)
 		images = readInTheImages();
 
 	T.postMediaChunked({ file_path: './images/' + img }, function handleMediaPosted(err, data, response)
@@ -175,7 +94,7 @@ function postImage()
 
 		var imageID = data.media_id_string;
 		log('image uploaded; id=' + imageID);
-		var toot = { status: chooseLine(), media_ids: [ imageID ] };
+		var toot = { status: chooseLine(), media_ids: [imageID] };
 		postTweet(toot);
 	});
 }
@@ -183,7 +102,7 @@ function postImage()
 // Bollocking the air around him.
 function postPeriodically()
 {
-	if (images.length && Math.floor(Math.random() * 100) < 12)
+	if (images.length > 0 && Math.floor(Math.random() * 100) < 12)
 		return postImage();
 
 	var line = chooseLine(TWEET_LEN);

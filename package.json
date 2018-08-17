@@ -7,13 +7,16 @@
     "url": "https://github.com/ceejbot/malcolm_ebooks/issues"
   },
   "dependencies": {
-    "dotenv": "~4.0.0",
-    "ellipsize": "0.0.3",
+    "dotenv": "~6.0.0",
+    "ellipsize": "~0.1.0",
     "knuth-shuffle": "~1.0.8",
     "markov-chains-text": "~1.0.0",
-    "twit": "~2.2.9"
+    "twit": "~2.2.11"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint-config-ceejbot": "~1.1.2",
+    "xo": "~0.22.0"
+  },
   "homepage": "https://github.com/ceejbot/malcolm_ebooks#readme",
   "keywords": [],
   "license": "ISC",
@@ -23,7 +26,11 @@
     "url": "git+https://github.com/ceejbot/malcolm_ebooks.git"
   },
   "scripts": {
+    "lint": "xo",
     "start": "./server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "xo": {
+    "extends": "eslint-config-ceejbot"
   }
 }
