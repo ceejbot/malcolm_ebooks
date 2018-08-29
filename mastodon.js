@@ -3,10 +3,9 @@
 require('dotenv').config();
 const
 	ellipsize = require('ellipsize'),
-	FormData  = require('form-data'),
 	fs        = require('fs'),
 	shuffle   = require('knuth-shuffle').knuthShuffle,
-	Mastodon  = require('mastodon')
+	Mastodon  = require('mastodon-api')
 	;
 
 const INTERVAL = 180 * 60 * 1000; // once every 3 hours
@@ -96,6 +95,27 @@ async function postImage()
 		log(err.message);
 	}
 }
+
+// Bollocking people who dare talk to him.
+const listener = M.stream('streaming/user');
+
+listener.on('message', message =>
+{
+	if (message.event !== 'notification') return;
+	if (message.data.type !== 'mention') return;
+
+	const prefix = `@${message.data.status.account.acct} `;
+	const text = chooseLine(POST_LEN - prefix.length);
+
+	const reply = {
+		in_reply_to_id: message.data.status.id,
+		visibility: message.data.status.visibility,
+		status: prefix + text
+	};
+	postToot(reply);
+});
+
+listener.on('error', err => console.log(err));
 
 // Bollocking the air around him.
 function postPeriodically()

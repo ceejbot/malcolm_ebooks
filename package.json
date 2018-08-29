@@ -11,7 +11,7 @@
     "ellipsize": "~0.1.0",
     "knuth-shuffle": "~1.0.8",
     "markov-chains-text": "~1.0.0",
-    "mastodon": "~1.2.2",
+    "mastodon-api": "~1.3.0",
     "twit": "~2.2.11"
   },
   "devDependencies": {
