@@ -28,6 +28,7 @@
   },
   "scripts": {
     "lint": "xo",
+    "mastodon": "./mastodon.js",
     "start": "./server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
