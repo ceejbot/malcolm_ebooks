@@ -10,7 +10,7 @@ const
 	;
 
 const INTERVAL = 180 * 60 * 1000; // once every 3 hours
-const LAST_POST_FILE = '.lastpost';
+const LAST_POST_FILE = '.lastmasto';
 const POST_LEN = 500;
 
 const TIM_IN_RUISLIP = 'https://www.youtube.com/watch?v=6GT18lYRRDQ';
