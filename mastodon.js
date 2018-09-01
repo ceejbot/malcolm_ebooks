@@ -127,7 +127,7 @@ function postPeriodically()
 	if (line.match(/Ruislip/) && Math.floor(Math.random() * 100) < 25)
 		line += ' ' + TIM_IN_RUISLIP;
 
-	postToot({ status: line });
+	postToot({ status: line, spoiler_text: 'Tuckerisms' });
 }
 
 log('Malcolm Tucker coming online.');
