@@ -33,6 +33,7 @@ function readInTheImages()
 	try
 	{
 		imgs = fs.readdirSync('./images');
+		imgs = imgs.filter(fname => fname.match(/(gif|jpg|png)$/));
 		shuffle(imgs);
 		log('--- ' + imgs.length + ' images read');
 
@@ -84,7 +85,6 @@ async function postImage()
 	try
 	{
 		const response = await M.post('media', { file: fs.createReadStream(`./images/${img}`), description: img });
-		console.log(response.data);
 		const imageID = response.data.id;
 		log('image uploaded; id=' + imageID);
 		const toot = { status: chooseLine(), media_ids: [imageID] };
