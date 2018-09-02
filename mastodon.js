@@ -62,6 +62,8 @@ function chooseLine(len)
 
 async function postToot(toot)
 {
+	toot.spoiler_text = 'Tuckerisms';
+
 	try
 	{
 		const response = await M.post('statuses', toot);
@@ -127,7 +129,7 @@ function postPeriodically()
 	if (line.match(/Ruislip/) && Math.floor(Math.random() * 100) < 25)
 		line += ' ' + TIM_IN_RUISLIP;
 
-	postToot({ status: line, spoiler_text: 'Tuckerisms' });
+	postToot({ status: line });
 }
 
 log('Malcolm Tucker coming online.');
